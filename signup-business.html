@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up - Business</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: white;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-section img {
+      height: 50px;
+    }
+
+    .site-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #9f1a1a;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      background-color: white; 
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #9f1a1a;
+      font-weight: bold;
+      background-color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    form {
+      border: 1px solid #ccc;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #aaa;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="checkbox"] {
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background-color: #9f1a1a;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 3px;
+    }
+
+    .success {
+      color: green;
+      font-size: 1em;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .login-link a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-section">
+      <a href="index.html"><img src="logo.png" alt="Logo" /></a>
+      <span class="site-name">Georgian Success in America</span>
+    </div>
+    <nav id="nav-links">
+      <a href="signup-choice.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Sign Up as Business</h1>
+    <form id="signupForm" autocomplete="off">
+      <label for="firstName">First Name*</label>
+      <input type="text" id="firstName" name="firstName" required />
+
+      <label for="lastName">Last Name*</label>
+      <input type="text" id="lastName" name="lastName" required />
+
+      <label for="email">Business Email*</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password* (Min 6 chars, 1 uppercase, 1 number)</label>
+      <input type="password" id="password" name="password" required />
+
+      <label for="confirmPassword">Confirm Password*</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required />
+
+      <label for="country">Country*</label>
+      <select id="country" name="country" required>
+        <option value="">Select a country</option>
+        <option value="USA">USA</option>
+        <option value="Georgia">Georgia</option>
+      </select>
+
+      <label for="state">State*</label>
+      <select id="state" name="state" required></select>
+
+      <label><input type="checkbox" id="rememberMe" /> Remember Me</label>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <div id="message"></div>
+
+    <p class="login-link">Already have an account? <a href="login.html">Log In</a></p>
+  </div>
+
+  <!-- Firebase + Dynamic State Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
+      authDomain: "mywebsitesignup-671f5.firebaseapp.com",
+      projectId: "mywebsitesignup-671f5",
+      storageBucket: "mywebsitesignup-671f5.appspot.com",
+      messagingSenderId: "418016210554",
+      appId: "1:418016210554:web:4a4f81aa4f5be22868d5c3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("signupForm");
+    const messageDiv = document.getElementById("message");
+
+    const usaStates = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Florida", "Georgia", "Illinois", "New York", "Texas", "Washington"];
+    const georgiaStates = ["Tbilisi", "Kutaisi", "Batumi", "Rustavi", "Zugdidi"];
+
+    const countryDropdown = document.getElementById("country");
+    const stateDropdown = document.getElementById("state");
+
+    countryDropdown.addEventListener("change", () => {
+      const selectedCountry = countryDropdown.value;
+      stateDropdown.innerHTML = "";
+
+      let states = [];
+      if (selectedCountry === "USA") states = usaStates;
+      else if (selectedCountry === "Georgia") states = georgiaStates;
+
+      states.forEach(state => {
+        const option = document.createElement("option");
+        option.value = state;
+        option.textContent = state;
+        stateDropdown.appendChild(option);
+      });
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      messageDiv.textContent = "";
+
+      const firstName = form.firstName.value.trim();
+      const lastName = form.lastName.value.trim();
+      const email = form.email.value.trim().toLowerCase();
+      const password = form.password.value;
+      const confirmPassword = form.confirmPassword.value;
+      const country = form.country.value;
+      const state = form.state.value.trim();
+
+      if (password.length < 6 || !/[A-Z]/.test(password) || !/\d/.test(password)) {
+        messageDiv.textContent = "Password must have 6+ chars, 1 uppercase letter, and 1 number.";
+        messageDiv.className = "error";
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        messageDiv.textContent = "Passwords do not match.";
+        messageDiv.className = "error";
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await addDoc(collection(db, "users"), {
+          firstName, lastName, email, country, state, createdAt: new Date().toISOString()
+        });
+
+        await sendEmailVerification(user);
+
+        if (document.getElementById("rememberMe").checked) {
+          localStorage.setItem("rememberedUser", JSON.stringify({ firstName, lastName, email, country, state }));
+        }
+
+        messageDiv.textContent = "Sign up successful! Please verify your email.";
+        messageDiv.className = "success";
+        form.reset();
+
+        window.location.href = "business-subscription.html"; // ✅ ADDED
+
+
+
+      } catch (err) {
+        messageDiv.textContent = "Error: " + err.message;
+        messageDiv.className = "error";
+      }
+    });
+
+    // Show initials if logged in
+    window.addEventListener("DOMContentLoaded", () => {
+      const initials = localStorage.getItem("initials");
+      const navLinks = document.getElementById("nav-links");
+
+      if (initials) {
+        navLinks.innerHTML = `<span style="color: #9f1a1a; font-weight: bold;">${initials}</span>`;
+      }
+    });
+  </script>
+</body>
+</html>

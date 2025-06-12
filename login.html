@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 0 15px;
+      background-color: white;
+      color: #9f1a1a;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 25px;
+      background-color: white;
+      border-bottom: 2px solid #9f1a1a;
+      margin-bottom: 20px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-container img {
+      height: 40px;
+      width: auto;
+    }
+
+    .logo-container span {
+      font-weight: bold;
+      font-size: 20px;
+      color: #9f1a1a;
+      user-select: none;
+    }
+
+    #initials-container {
+      position: relative;
+    }
+
+    #initials {
+      font-weight: bold;
+      color: white;
+      background-color: #9f1a1a;
+      padding: 8px 14px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: none;
+      user-select: none;
+    }
+
+    #dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 120%;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    #dropdown a {
+      display: block;
+      padding: 10px 20px;
+      color: #9f1a1a;
+      text-decoration: none;
+    }
+
+    #dropdown a:hover {
+      background-color: #f5f5f5;
+    }
+
+    form {
+      border: 1px solid #ccc;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #aaa;
+      background-color: white;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background-color: #9f1a1a;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #7a1313;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: red;
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo" />
+      <span>Georgian Success in America</span>
+    </div>
+    <div id="initials-container">
+      <span id="initials"></span>
+      <div id="dropdown">
+        <a href="#" id="logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <form id="loginForm" autocomplete="off">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required />
+
+    <button type="submit">Login</button>
+  </form>
+
+  <div id="message"></div>
+
+  <p>
+    Don't have an account? <a href="signup-choice.html" style="color: #9f1a1a;">Sign Up</a>
+  </p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
+      authDomain: "mywebsitesignup-671f5.firebaseapp.com",
+      projectId: "mywebsitesignup-671f5",
+      storageBucket: "mywebsitesignup-671f5.appspot.com",
+      messagingSenderId: "418016210554",
+      appId: "1:418016210554:web:4a4f81aa4f5be22868d5c3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("loginForm");
+    const messageDiv = document.getElementById("message");
+    const initials = document.getElementById("initials");
+    const dropdown = document.getElementById("dropdown");
+    const logoutLink = document.getElementById("logout");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      messageDiv.textContent = "";
+      const email = form.email.value.trim().toLowerCase();
+      const password = form.password.value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (!user.emailVerified) {
+          messageDiv.textContent = "Please verify your email before logging in.";
+          return;
+        }
+
+        // Fetch user initials and show
+        const q = query(collection(db, "users"), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          const userInitials = 
+            (userData.firstName?.charAt(0) || "") + 
+            (userData.lastName?.charAt(0) || "");
+          initials.textContent = userInitials.toUpperCase();
+          initials.style.display = "inline-block";
+
+          if (userData.subscribed === true) {
+            window.location.href = "index.html"; // or main dashboard
+          } else {
+            window.location.href = "business-subscription.html";
+            }
+
+
+        }
+
+
+       
+
+        // Redirect to home page
+        // window.location.href = "index.html";
+
+      } catch (error) {
+        messageDiv.textContent = "Login failed: " + error.message;
+      }
+    });
+
+    // Show initials if already logged in
+    onAuthStateChanged(auth, async (user) => {
+      if (user && user.emailVerified) {
+        const q = query(collection(db, "users"), where("email", "==", user.email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          const userInitials = 
+            (userData.firstName?.charAt(0) || "") + 
+            (userData.lastName?.charAt(0) || "");
+          initials.textContent = userInitials.toUpperCase();
+          initials.style.display = "inline-block";
+        }
+      }
+    });
+
+    // Toggle dropdown on click
+    initials.addEventListener("click", () => {
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    // Logout
+    logoutLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await signOut(auth);
+      window.location.reload();
+    });
+
+    // Hide dropdown if clicked outside
+    window.addEventListener("click", (e) => {
+      if (!document.getElementById("initials-container").contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

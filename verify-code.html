@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify Code</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 400px; margin: auto; }
+    input, button { width: 100%; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Enter Verification Code</h2>
+  <input id="codeInput" placeholder="Enter 5-digit code" />
+  <button onclick="verifyCode()">Verify</button>
+  <p id="message"></p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import {
+      getAuth,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
+      authDomain: "mywebsitesignup-671f5.firebaseapp.com",
+      projectId: "mywebsitesignup-671f5",
+      storageBucket: "mywebsitesignup-671f5.appspot.com",
+      messagingSenderId: "418016210554",
+      appId: "1:418016210554:web:4a4f81aa4f5be22868d5c3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const uid = urlParams.get("uid");
+    const message = document.getElementById("message");
+
+    window.verifyCode = async function () {
+      const codeInput = document.getElementById("codeInput").value.trim();
+
+      if (!codeInput || codeInput.length !== 5) {
+        message.textContent = "Enter a valid 5-digit code.";
+        return;
+      }
+
+      try {
+        const tempDocRef = doc(db, "tempUsers", uid);
+        const tempSnap = await getDoc(tempDocRef);
+
+        if (!tempSnap.exists()) {
+          message.textContent = "Verification failed. User not found.";
+          return;
+        }
+
+        const data = tempSnap.data();
+
+        if (data.code === codeInput) {
+          // Save verified user data to permanent users collection
+          await setDoc(doc(db, "users", uid), {
+            uid: uid,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            createdAt: new Date()
+          });
+
+          await deleteDoc(tempDocRef); // remove temporary doc
+          message.style.color = "green";
+          message.textContent = "Verified successfully! Redirecting to login...";
+          setTimeout(() => (window.location.href = "login.html"), 2000);
+        } else {
+          message.textContent = "Incorrect code. Please try again.";
+        }
+      } catch (err) {
+        message.textContent = "Error: " + err.message;
+      }
+    };
+  </script>
+</body>
+</html>
