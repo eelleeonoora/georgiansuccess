@@ -1,22 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Courses</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Courses | Georgian Success in America</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #9f1a1a;
+    }
+
+    .logo-container img {
+      height: 80px;
+      margin-right: 10px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #9f1a1a;
+      font-weight: bold;
+      background-color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #898686;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .initials {
+      background-color: #9f1a1a;
+      color: white;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #9f1a1a;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 12px 0;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html">About Us</a> |
-    <a href="courses.html">Courses</a> |
-    <a href="signup-choice.html">Sign Up</a>
 
-  </nav>
+  <header>
+    <a href="index.html" class="logo-container">
+      <img src="logo.png" alt="Logo" />
+      <span style="font-size: 20px; font-weight: bold;">Georgian Success in America</span>
+    </a>
 
-  <h1>Our Courses</h1>
-  <ul>
-    <li><strong>Web Development 101</strong> - Learn HTML, CSS, and more!</li>
-    <li><strong>Python Basics</strong> - Great for beginners in coding.</li>
-    <li><strong>Data Analysis</strong> - Intro to data tools and reporting.</li>
-  </ul>
+    <nav>
+      <div id="navLinks">
+        <a href="courses.html">Courses</a> 
+        <a href="signup-choice.html">Sign Up</a>
+        <a href="login.html">Login</a>
+      </div>
+      <div id="userInfo" class="user-info" style="display: none;"></div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Our Courses</h1>
+    <ul>
+      <li><strong>🌐 Web Development 101</strong> – Learn HTML, CSS, and JavaScript from scratch.</li>
+      <li><strong>🐍 Python Basics</strong> – Ideal for beginners in coding and scripting.</li>
+      <li><strong>📊 Data Analysis</strong> – Introduction to data tools, Excel, and basic reporting.</li>
+    </ul>
+  </main>
+
+  <!-- Firebase Auth Script (same as index.html) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
+      authDomain: "mywebsitesignup-671f5.firebaseapp.com",
+      projectId: "mywebsitesignup-671f5",
+      storageBucket: "mywebsitesignup-671f5.appspot.com",
+      messagingSenderId: "418016210554",
+      appId: "1:418016210554:web:4a4f81aa4f5be22868d5c3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const navLinks = document.getElementById("navLinks");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user && user.emailVerified) {
+        const uid = user.uid;
+        let firstName = "";
+        let lastName = "";
+
+        try {
+          const individualDoc = await getDoc(doc(db, "users", uid));
+          const businessDoc = await getDoc(doc(db, "businessUsers", uid));
+
+          const data = individualDoc.exists()
+            ? individualDoc.data()
+            : businessDoc.exists()
+            ? businessDoc.data()
+            : null;
+
+          if (data) {
+            firstName = data.firstName || "";
+            lastName = data.lastName || "";
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+
+        const initials =
+          (firstName.charAt(0) || "").toUpperCase() +
+          (lastName.charAt(0) || "").toUpperCase();
+
+        const userInfoDiv = document.getElementById("userInfo");
+        userInfoDiv.innerHTML = `
+          <div class="initials">${initials}</div>
+          <button onclick="logout()" style="background:none;border:none;color:#9f1a1a;cursor:pointer;font-weight:bold;">Logout</button>
+        `;
+        userInfoDiv.style.display = "flex";
+
+        // Hide Sign Up / Login when user is logged in
+        document.getElementById("navLinks").style.display = "none";
+      }
+    });
+
+    window.logout = function () {
+      signOut(auth).then(() => {
+        location.reload();
+      });
+    };
+  </script>
+
 </body>
 </html>
