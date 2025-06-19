@@ -1,0 +1,15 @@
+<button id="payButton">Buy Now</button>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe('pk_live_51Rb5yLFxVOAKyQexROzN21LkfAF3LQmVrPxdq0eyySphy2QiblOZ1JaGn73Efum8o1eHr5Kxa8VvNZtJoBEi684F000tebxxBb'); // Replace with your Stripe public key
+
+  document.getElementById('payButton').addEventListener('click', async () => {
+    const res = await fetch('/.netlify/functions/create-checkout-session', {
+      method: 'POST',
+    });
+
+    const data = await res.json();
+    stripe.redirectToCheckout({ sessionId: data.id });
+  });
+</script>
