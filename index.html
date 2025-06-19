@@ -4,93 +4,6 @@
   <meta charset="UTF-8" />
   <title>Georgian Success in America</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    nav {
-      background-color: white; /* Ensure the nav bar has white background */
-    }
-
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background-color: #ffffff;
-      border-bottom: 1px solid #ccc;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: #9f1a1a;
-    }
-
-    .logo-container img {
-      height: 80px;
-      margin-right: 10px;
-    }
-
-    nav {
-      display: flex;
-      gap: 20px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #9f1a1a;
-      font-weight: bold;
-      background-color: white;
-      padding: 8px 16px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    nav a:hover {
-      background-color: #898686;
-    }
-
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .initials {
-      background-color: #9f1a1a;
-      color: white;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      font-weight: bold;
-}
-
-
-    main {
-      padding: 40px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 32px;
-    }
-
-    p {
-      font-size: 18px;
-    }
-  </style>
 </head>
 <body>
 
@@ -98,7 +11,7 @@
     
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
-      <span style="font-size: 20px; font-weight: bold;">Georgian Success in America</span>
+      <span class="logo-text">Georgian Success in America</span>
     </a>
 
     <nav>
@@ -118,12 +31,9 @@
     <p>
       ჩვენს შესახებ<br><br>
       ვებსაიტი შევქმენით შენი დახმარების, გვერდში დგომის, წინ წაწევისა და ამერიკაში შენი წარმატების მოსაპოვებლად.<br><br>
-      იდეა დაფუძვნებულია პირადი გამოცდილებისა და გარშემო მყოფების საჭიროებებზე, და მუდმივად იზრდება.<br><br>
-      Georgian Success in America მაქსიმალურად ცდილობს დაგეხმაროს ამერიკის შეერთებული შტატების მიწაზე მარტივად დაფუძვნებაში.<br><br>
-   
-
+      იდეა დაფუძნებულია პირადი გამოცდილებისა და გარშემო მყოფების საჭიროებებზე, და მუდმივად იზრდება.<br><br>
+      Georgian Success in America მაქსიმალურად ცდილობს დაგეხმაროს ამერიკის შეერთებული შტატების მიწაზე მარტივად დაფუძნებაში.<br><br>
     </p>
-
   </main>
 
   <!-- Firebase SDKs -->
@@ -186,15 +96,13 @@
         const userInfoDiv = document.getElementById("userInfo");
         userInfoDiv.innerHTML = `
           <div class="initials">${initials}</div>
-          <button onclick="logout()" style="background:none;border:none;color:#9f1a1a;cursor:pointer;font-weight:bold;">Logout</button>
+          <button onclick="logout()" class="logout-btn">Logout</button>
           `;
         userInfoDiv.style.display = "flex";
 
-        // Optionally hide signup/login
         document.getElementById("navLinks").style.display = "none";
       }
     });
-
 
     window.logout = function () {
       signOut(auth).then(() => {

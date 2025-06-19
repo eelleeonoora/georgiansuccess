@@ -131,6 +131,14 @@
       text-align: center;
       margin-top: 15px;
     }
+
+    #signup-link {
+      color: #9f1a1a;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -159,8 +167,8 @@
 
   <div id="message"></div>
 
-  <p>
-    Don't have an account? <a href="signup-choice.html" style="color: #9f1a1a;">Sign Up</a>
+  <p id="signup-p">
+    Don't have an account? <a href="signup-choice.html" id="signup-link">Sign Up</a>
   </p>
 
   <script type="module">
@@ -197,6 +205,7 @@
     const initials = document.getElementById("initials");
     const dropdown = document.getElementById("dropdown");
     const logoutLink = document.getElementById("logout");
+    const signupParagraph = document.getElementById("signup-p");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -213,7 +222,7 @@
           return;
         }
 
-        // Fetch user initials and show
+        // Get initials
         const q = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
@@ -221,21 +230,10 @@
           const userInitials = 
             (userData.firstName?.charAt(0) || "") + 
             (userData.lastName?.charAt(0) || "");
-          initials.textContent = userInitials.toUpperCase();
-          initials.style.display = "inline-block";
-
-          
-            window.location.href = "index.html"; // or main dashboard
-         
-
-
+          localStorage.setItem("userInitials", userInitials.toUpperCase());
         }
 
-
-       
-
-        // Redirect to home page
-        // window.location.href = "index.html";
+        window.location.href = "index.html";
 
       } catch (error) {
         messageDiv.textContent = "Login failed: " + error.message;
@@ -245,6 +243,8 @@
     // Show initials if already logged in
     onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
+        signupParagraph.style.display = "none";
+
         const q = query(collection(db, "users"), where("email", "==", user.email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
@@ -258,7 +258,7 @@
       }
     });
 
-    // Toggle dropdown on click
+    // Toggle dropdown
     initials.addEventListener("click", () => {
       dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     });
