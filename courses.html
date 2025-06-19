@@ -10,7 +10,7 @@
   <header>
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
-      <span style="font-size: 20px; font-weight: bold;">Georgian Success in America</span>
+      <span class="logo-text">Georgian Success in America</span>
     </a>
 
     <nav>
@@ -24,15 +24,19 @@
   </header>
 
   <main>
-    <h1>Our Courses</h1>
-    <ul>
+    <h2>Our Courses</h2>
+    <ul style="list-style-type: none; padding-left: 0; margin-bottom: 30px;">
       <li><strong>🌐 Web Development 101</strong> – Learn HTML, CSS, and JavaScript from scratch.</li>
       <li><strong>🐍 Python Basics</strong> – Ideal for beginners in coding and scripting.</li>
       <li><strong>📊 Data Analysis</strong> – Introduction to data tools, Excel, and basic reporting.</li>
     </ul>
+
+    <div class="choice-buttons">
+      <a href="signup-choice.html" class="button-link">Enroll Now</a>
+    </div>
   </main>
 
-  <!-- Firebase Auth Script (same as index.html) -->
+  <!-- Firebase Auth Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import {
@@ -92,11 +96,9 @@
         const userInfoDiv = document.getElementById("userInfo");
         userInfoDiv.innerHTML = `
           <div class="initials">${initials}</div>
-          <button onclick="logout()" style="background:none;border:none;color:#9f1a1a;cursor:pointer;font-weight:bold;">Logout</button>
+          <button onclick="logout()" class="logout-btn">Logout</button>
         `;
         userInfoDiv.style.display = "flex";
-
-        // Hide Sign Up / Login when user is logged in
         document.getElementById("navLinks").style.display = "none";
       }
     });
