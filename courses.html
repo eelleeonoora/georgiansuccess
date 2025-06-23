@@ -36,28 +36,28 @@
     </div>
   </main>
 
-  <!-- Stripe JS -->
-  <script src="https://js.stripe.com/v3/"></script>
+  
 
   <script>
     document.getElementById("enrollBtn").addEventListener("click", async () => {
-      const stripe = Stripe("pk_live_51Rb5yLFxVOAKyQexROzN21LkfAF3LQmVrPxdq0eyySphy2QiblOZ1JaGn73Efum8o1eHr5Kxa8VvNZtJoBEi684F000tebxxBbY"); // Replace with your real public key
-
-      const response = await fetch("/.netlify/functions/create-checkout-session", {
-        method: "POST",
-      });
-
-      const session = await response.json();
-
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
-
-      if (result.error) {
-        alert(result.error.message);
+      try {
+        const response = await fetch("/.netlify/functions/create-checkout-session", {
+          method: "POST",
+        });
+  
+        const data = await response.json();
+  
+        if (data.url) {
+          window.location.href = data.url; // ✅ Redirect to Stripe Checkout
+        } else {
+          alert("Something went wrong: " + (data.error || "No URL returned"));
+        }
+      } catch (error) {
+        alert("Network or server error: " + error.message);
       }
     });
   </script>
+  
 
   <!-- Firebase Auth Script (same as before) -->
   <script type="module">
