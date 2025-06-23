@@ -168,6 +168,7 @@
       <select id="state" name="state" required></select>
 
       <label><input type="checkbox" id="rememberMe" /> Remember Me</label>
+      <input type="hidden" id="accountType" value="business" />
 
       <button type="submit">Sign Up</button>
     </form>
@@ -250,7 +251,7 @@
         const user = userCredential.user;
 
         await addDoc(collection(db, "users"), {
-          firstName, lastName, email, country, state, createdAt: new Date().toISOString()
+          firstName, lastName, email, country, state,  accountType: "business", createdAt: new Date().toISOString()
         });
 
         await sendEmailVerification(user);
