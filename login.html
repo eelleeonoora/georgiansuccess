@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,7 +28,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      text-decoration: none;
     }
 
     .logo-container img {
@@ -42,13 +40,6 @@
       font-size: 20px;
       color: #9f1a1a;
       user-select: none;
-    }
-
-    #navLinks a {
-      margin-left: 15px;
-      text-decoration: none;
-      color: #9f1a1a;
-      font-weight: 600;
     }
 
     #initials-container {
@@ -151,18 +142,12 @@
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" class="logo-container">
-      <img src="logo.png" alt="Logo" />
-      <span>Georgian Success in America</span>
-    </a>
-
-    <div id="navLinks">
-      <a href="courses.html">Courses</a>
-      <a href="signup-choice.html">Sign Up</a>
-      <a href="login.html">Login</a>
-    </div>
-
+    <nav>
+        <a href="index.html" class="logo-container">
+          <img src="logo.png" alt="Logo" />
+          <span>Georgian Success in America</span>
+        </a>
+      
     <div id="initials-container">
       <span id="initials"></span>
       <div id="dropdown">
@@ -238,12 +223,13 @@
           return;
         }
 
+        // Get initials
         const q = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
-          const userInitials =
-            (userData.firstName?.charAt(0) || "") +
+          const userInitials = 
+            (userData.firstName?.charAt(0) || "") + 
             (userData.lastName?.charAt(0) || "");
           localStorage.setItem("userInitials", userInitials.toUpperCase());
         }
@@ -255,6 +241,7 @@
       }
     });
 
+    // Show initials if already logged in
     onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
         signupParagraph.style.display = "none";
@@ -263,8 +250,8 @@
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
-          const userInitials =
-            (userData.firstName?.charAt(0) || "") +
+          const userInitials = 
+            (userData.firstName?.charAt(0) || "") + 
             (userData.lastName?.charAt(0) || "");
           initials.textContent = userInitials.toUpperCase();
           initials.style.display = "inline-block";
@@ -272,16 +259,19 @@
       }
     });
 
+    // Toggle dropdown
     initials.addEventListener("click", () => {
       dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     });
 
+    // Logout
     logoutLink.addEventListener("click", async (e) => {
       e.preventDefault();
       await signOut(auth);
       window.location.reload();
     });
 
+    // Hide dropdown if clicked outside
     window.addEventListener("click", (e) => {
       if (!document.getElementById("initials-container").contains(e.target)) {
         dropdown.style.display = "none";
