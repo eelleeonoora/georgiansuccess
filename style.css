@@ -108,6 +108,23 @@ nav {
   box-shadow: 0 2px 12px rgb(0 0 0 / 0.1);
 } */
 
+.home-content {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: none;
+  border-radius: 0;
+  text-align: center;
+}
+
+.home-content h1,
+.home-content h2,
+.home-content p {
+  text-align: center;
+}
+
+
 /* Headings */
 h2 {
   text-align: center;
