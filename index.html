@@ -4,6 +4,47 @@
   <meta charset="UTF-8" />
   <title>Georgian Success in America</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Added styles for initials and logout button */
+    .initials {
+      font-weight: bold;
+      color: white;
+      background-color: #9f1a1a;
+      padding: 8px 14px;
+      border-radius: 50%;
+      font-size: 18px;
+      user-select: none;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .logout-btn {
+      background-color: transparent;
+      border: 1px solid #9f1a1a;
+      color: #9f1a1a;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #9f1a1a;
+      color: white;
+    }
+
+    /* Optional: style userInfo container */
+    #userInfo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
 
@@ -62,6 +103,7 @@
     const db = getFirestore(app);
 
     const navLinks = document.getElementById("navLinks");
+    const userInfoDiv = document.getElementById("userInfo");
 
     onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
@@ -91,13 +133,17 @@
           (firstName.charAt(0) || "").toUpperCase() +
           (lastName.charAt(0) || "").toUpperCase();
 
-        const userInfoDiv = document.getElementById("userInfo");
         userInfoDiv.innerHTML = `
           <div class="initials">${initials}</div>
           <button onclick="logout()" class="logout-btn">Logout</button>
         `;
         userInfoDiv.style.display = "flex";
-        document.getElementById("navLinks").style.display = "none";
+        navLinks.style.display = "none";
+      } else {
+        // User logged out or no user
+        userInfoDiv.style.display = "none";
+        userInfoDiv.innerHTML = "";
+        navLinks.style.display = "flex";
       }
     });
 
