@@ -213,3 +213,51 @@ a.button-link:hover {
     width: 100%;
   }
 }
+
+
+
+
+/* ======= Footer Styles ======= */
+.site-footer {
+  background-color: #9f1a1a;
+  color: white;
+  padding: 30px 20px 15px;
+  font-size: 0.95rem;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer-left, .footer-right {
+  flex: 1;
+  min-width: 220px;
+}
+
+.site-footer h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.site-footer a {
+  color: white;
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  color: #ffdede;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.85rem;
+  border-top: 1px solid #ffffff50;
+  padding-top: 15px;
+}
