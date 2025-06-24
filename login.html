@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -41,6 +42,13 @@
       font-size: 20px;
       color: #9f1a1a;
       user-select: none;
+    }
+
+    #navLinks a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #9f1a1a;
+      font-weight: 600;
     }
 
     #initials-container {
@@ -148,6 +156,13 @@
       <img src="logo.png" alt="Logo" />
       <span>Georgian Success in America</span>
     </a>
+
+    <div id="navLinks">
+      <a href="courses.html">Courses</a>
+      <a href="signup-choice.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+
     <div id="initials-container">
       <span id="initials"></span>
       <div id="dropdown">
@@ -227,8 +242,8 @@
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
-          const userInitials = 
-            (userData.firstName?.charAt(0) || "") + 
+          const userInitials =
+            (userData.firstName?.charAt(0) || "") +
             (userData.lastName?.charAt(0) || "");
           localStorage.setItem("userInitials", userInitials.toUpperCase());
         }
@@ -248,8 +263,8 @@
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userData = querySnapshot.docs[0].data();
-          const userInitials = 
-            (userData.firstName?.charAt(0) || "") + 
+          const userInitials =
+            (userData.firstName?.charAt(0) || "") +
             (userData.lastName?.charAt(0) || "");
           initials.textContent = userInitials.toUpperCase();
           initials.style.display = "inline-block";
