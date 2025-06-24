@@ -8,7 +8,6 @@
 <body>
 
   <header>
-    
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
       <span class="logo-text">Georgian Success in America</span>
@@ -22,18 +21,16 @@
       </div>
       <div id="userInfo" class="user-info" style="display: none;"></div>
     </nav>
-    
   </header>
-  <main class="home-content">
 
-  <main>
+  <main class="home-content">
     <h1>Welcome to Georgian Success in America</h1>
     <h2>About Us</h2>
     <p>
       ჩვენს შესახებ<br><br>
       ვებსაიტი შევქმენით შენი დახმარების, გვერდში დგომის, წინ წაწევისა და ამერიკაში შენი წარმატების მოსაპოვებლად.<br><br>
       იდეა დაფუძნებულია პირადი გამოცდილებისა და გარშემო მყოფების საჭიროებებზე, და მუდმივად იზრდება.<br><br>
-      Georgian Success in America მაქსიმალურად ცდილობს დაგეხმაროს ამერიკის შეერთებული შტატების მიწაზე მარტივად დაფუძნებაში.<br><br>
+      Georgian Success in America მაქსიმალურად ცდილობს დაგეხმაროს ამერიკის შეერთებული შტატების მიწაზე მარტივად დაფუძნებაში.
     </p>
   </main>
 
@@ -77,10 +74,10 @@
           const businessDoc = await getDoc(doc(db, "businessUsers", uid));
 
           const data = individualDoc.exists()
-          ? individualDoc.data()
-          : businessDoc.exists()
-          ? businessDoc.data()
-          : null;
+            ? individualDoc.data()
+            : businessDoc.exists()
+            ? businessDoc.data()
+            : null;
 
           if (data) {
             firstName = data.firstName || "";
@@ -98,9 +95,8 @@
         userInfoDiv.innerHTML = `
           <div class="initials">${initials}</div>
           <button onclick="logout()" class="logout-btn">Logout</button>
-          `;
+        `;
         userInfoDiv.style.display = "flex";
-
         document.getElementById("navLinks").style.display = "none";
       }
     });
