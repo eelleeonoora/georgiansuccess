@@ -5,13 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
+      color: #9f1a1a;
+      background-color: white;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      flex: 1;
       max-width: 400px;
       margin: 30px auto;
       padding: 0 15px;
-      background-color: white;
-      color: #9f1a1a;
     }
 
     nav {
@@ -134,33 +147,69 @@
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" class="logo-container">
-      <img src="logo.png" alt="Logo" />
-      <span>Georgian Success in America</span>
-    </a>
+  <div class="wrapper">
+    <nav>
+      <a href="index.html" class="logo-container">
+        <img src="logo.png" alt="Logo" />
+        <span>Georgian Success in America</span>
+      </a>
 
-    <div id="user-controls">
-      <span id="initials"></span>
-      <button id="logout" class="logout-btn">Logout</button>
+      <div id="user-controls">
+        <span id="initials"></span>
+        <button id="logout" class="logout-btn">Logout</button>
+      </div>
+    </nav>
+
+    <form id="loginForm" autocomplete="off">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div id="message"></div>
+
+    <p id="signup-p">
+      Don't have an account? <a href="signup-choice.html" id="signup-link">Sign Up</a>
+    </p>
+  </div>
+
+  <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
+    <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+      <div class="footer-left" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Contact</h3>
+        <p>
+          <a href="http://wa.me/13103455780" target="_blank" style="color: white; text-decoration: none;">
+            <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Chat with us
+          </a>
+        </p>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Follow Us</h3>
+        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr"
+          target="_blank"
+          style="color: white; text-decoration: none;">
+          <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
+        </a>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Location</h3>
+        <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Los Angeles, USA
+      </div>
     </div>
-  </nav>
+    <div class="footer-bottom" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #ccc;">
+      © 2025 Georgian Success in America. All rights reserved.
+    </div>
+  </footer>
 
-  <form id="loginForm" autocomplete="off">
-    <label for="email">Email Address</label>
-    <input type="email" id="email" name="email" required />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required />
-
-    <button type="submit">Login</button>
-  </form>
-
-  <div id="message"></div>
-
-  <p id="signup-p">
-    Don't have an account? <a href="signup-choice.html" id="signup-link">Sign Up</a>
-  </p>
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
