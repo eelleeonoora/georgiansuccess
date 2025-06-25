@@ -2,46 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Courses | Georgian Success in America</title>
+  <title>Course B1 – B2 | Georgian Success in America</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .english-courses {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .course-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .course-button {
-      background-color: #9f1a1a;
-      color: white;
-      border: none;
-      padding: 30px 20px;
-      font-size: 1.2rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s ease;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .course-details {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
       text-align: center;
     }
 
-    .course-button:hover {
-      background-color: #7a1313;
-      transform: translateY(-5px);
+    .course-details h2 {
+      color: #9f1a1a;
+      margin-bottom: 20px;
+    }
+
+    .course-details p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .button-link {
+      padding: 14px 20px;
+      font-size: 1.1rem;
     }
   </style>
 </head>
-<body class="courses-page">
+<body>
 
   <header>
     <a href="index.html" class="logo-container">
@@ -59,20 +46,20 @@
     </nav>
   </header>
 
-  <main class="english-courses">
-    <h2>Studying English Fully</h2>
+  <main class="course-details">
+    <h2>Course B1 – B2</h2>
+    <p>
+      This course is designed for absolute beginners. Learn basic English grammar, vocabulary, greetings, and everyday expressions to get you started in American life.
+    </p>
 
-    <div class="course-buttons">
-      <a class="course-button" href="course-0-a1.html">Course 0 – A1</a>
-      <a class="course-button" href="course-a1-a2.html">Course A1 – A2</a>
-      <a class="course-button" href="course-a2-b1.html">Course A2 – B1</a>
-      <a class="course-button" href="course-b1-b2.html">Course B1 – B2+</a>
+    <div class="choice-buttons">
+      <button id="enrollBtn" class="button-link">Enroll Now</button>
     </div>
   </main>
 
-  <!-- Stripe script remains (optional if needed) -->
+  <!-- Stripe Enroll Script -->
   <script>
-    document.getElementById("enrollBtn")?.addEventListener("click", async () => {
+    document.getElementById("enrollBtn").addEventListener("click", async () => {
       try {
         const response = await fetch("/.netlify/functions/create-checkout-session", {
           method: "POST",
