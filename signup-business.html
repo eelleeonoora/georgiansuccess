@@ -10,6 +10,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      color: #333;
     }
 
     header {
@@ -40,16 +41,19 @@
     nav {
       display: flex;
       gap: 20px;
-      background-color: white; 
+      background-color: white;
     }
 
     nav a {
       text-decoration: none;
       color: #9f1a1a;
       font-weight: bold;
-      background-color: white;
       padding: 5px 10px;
       border-radius: 4px;
+    }
+
+    nav a:hover {
+      background-color: #f5dede;
     }
 
     .container {
@@ -63,11 +67,14 @@
       padding: 25px;
       border-radius: 8px;
       box-shadow: 0 0 8px #aaa;
+      background-color: #fff;
     }
 
     label {
       display: block;
       margin-top: 15px;
+      color: #9f1a1a;
+      font-weight: 600;
     }
 
     input[type="text"],
@@ -99,7 +106,7 @@
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #7a1414;
     }
 
     .error {
@@ -140,7 +147,7 @@
   </header>
 
   <div class="container">
-    <h1>Sign Up as Business</h1>
+    <h1 style="color: #9f1a1a;">Sign Up as Business</h1>
     <form id="signupForm" autocomplete="off">
       <label for="firstName">First Name*</label>
       <input type="text" id="firstName" name="firstName" required />
@@ -200,8 +207,20 @@
     const form = document.getElementById("signupForm");
     const messageDiv = document.getElementById("message");
 
-    const usaStates = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Florida", "Georgia", "Illinois", "New York", "Texas", "Washington"];
-    const georgiaStates = ["Tbilisi", "Kutaisi", "Batumi", "Rustavi", "Zugdidi"];
+    const usaStates = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+  "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+  "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+  "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico",
+  "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+  "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+  "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+  ];
+
+    const georgiaStates = [
+  "Tbilisi", "Kutaisi", "Batumi", "Rustavi", "Zugdidi", "Poti", "Gori", "Telavi", "Samtredia", "Senaki"
+  ];
+
 
     const countryDropdown = document.getElementById("country");
     const stateDropdown = document.getElementById("state");
@@ -251,7 +270,7 @@
         const user = userCredential.user;
 
         await addDoc(collection(db, "users"), {
-          firstName, lastName, email, country, state,  accountType: "business", createdAt: new Date().toISOString()
+          firstName, lastName, email, country, state, accountType: "business", createdAt: new Date().toISOString()
         });
 
         await sendEmailVerification(user);
@@ -264,9 +283,7 @@
         messageDiv.className = "success";
         form.reset();
 
-        window.location.href = "business-subscription.html"; // ✅ ADDED
-
-
+        window.location.href = "business-subscription.html";
 
       } catch (err) {
         messageDiv.textContent = "Error: " + err.message;
