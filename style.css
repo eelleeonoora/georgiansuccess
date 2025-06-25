@@ -15,7 +15,7 @@ body {
 
 /* Header styling */
 header {
-  background-color: #9f1a1a;
+  background-color: #ffffff;
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
@@ -27,17 +27,17 @@ header {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: white;
+  color: #9f1a1a;
 }
 
 .logo-container img {
-  height: 40px;
+  height: 80px;
 }
 
 .logo-text {
   font-size: 1.8rem;
   font-weight: 700;
-  color: white;
+  color: #9f1a1a;
 }
 
 /* Navigation */
@@ -48,7 +48,7 @@ nav {
 }
 
 #navLinks a {
-  color: white;
+  color: #9f1a1a;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
@@ -58,7 +58,7 @@ nav {
 }
 
 #navLinks a:hover {
-  background-color: #7a1414;
+  background-color: #f0f0f0;
 }
 
 /* User info styling */
