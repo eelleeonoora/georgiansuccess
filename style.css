@@ -5,6 +5,17 @@
   padding: 0;
 }
 
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
 /* Body and fonts */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -260,4 +271,9 @@ a.button-link:hover {
   font-size: 0.85rem;
   border-top: 1px solid #ffffff50;
   padding-top: 15px;
+}
+
+
+main {
+  flex: 1;
 }
