@@ -341,8 +341,8 @@ main {
   }
 
   #navLinks a {
-    padding: 12px 15px;
-    font-size: 1.1rem;
+    padding: 14px 18px;       /* Bigger clickable area */
+    font-size: 1.3rem;        /* Larger font */
     width: 100%;
     text-align: left;
   }
@@ -358,6 +358,15 @@ main {
 
   .dropdown-content a {
     padding-left: 30px;
+  }
+
+  /* Logo bigger */
+  .logo-container img {
+    height: 80px; /* Bigger logo on small screens */
+  }
+
+  .logo-text {
+    font-size: 1.8rem; /* Bigger logo text */
   }
 
   /* Signup choice buttons stacked */
