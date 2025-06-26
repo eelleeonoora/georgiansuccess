@@ -277,3 +277,14 @@ a.button-link:hover {
 main {
   flex: 1;
 }
+
+
+/* Override nav link color only for dropdown */
+.dropdown-content a {
+  color: #333 !important;
+}
+
+.dropdown-content a:hover {
+  background-color: #f0f0f0;
+  color: #000 !important;
+}

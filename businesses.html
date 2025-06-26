@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Businesses - Georgian Success in America</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 15px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 10px 12px;
+    }
+    nav a:hover, nav a.active {
+      background-color: #555;
+      color: white;
+      border-radius: 5px;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 240px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .dropdown-content a {
+      color: #333 !important;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dropdown-content a:hover {
+      background-color: #f0f0f0;
+      color: #000 !important;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .category {
+      padding: 20px;
+      display: none;
+    }
+    .category.active {
+      display: block;
+    }
+    .icon-restaurant { color: #ff5722; }
+    .icon-beauty { color: #9c27b0; }
+    .icon-car { color: #3f51b5; }
+    .icon-legal { color: #795548; }
+    .icon-education { color: #2196f3; }
+    .icon-fitness { color: #4caf50; }
+    .icon-realestate { color: #ff9800; }
+    .icon-finance { color: #388e3c; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="index.html" class="logo-container">
+      <img src="logo.png" alt="Logo" />
+    </a>
+    <nav>
+      <div id="navLinks">
+        <div class="dropdown">
+          <a href="#">Business Categories</a>
+          <div class="dropdown-content">
+            <a href="#" onclick="showCategory('restaurants')"><i class="fas fa-utensils icon-restaurant"></i>Restaurants</a>
+            <a href="#" onclick="showCategory('beauty')"><i class="fas fa-spa icon-beauty"></i>Beauty & Wellness</a>
+            <a href="#" onclick="showCategory('car')"><i class="fas fa-car icon-car"></i>Car & Maintenance</a>
+            <a href="#" onclick="showCategory('legal')"><i class="fas fa-gavel icon-legal"></i>Legal & Paralegal</a>
+            <a href="#" onclick="showCategory('education')"><i class="fas fa-book icon-education"></i>Education & Tutoring</a>
+            <a href="#" onclick="showCategory('fitness')"><i class="fas fa-dumbbell icon-fitness"></i>Fitness & Wellness</a>
+            <a href="#" onclick="showCategory('realestate')"><i class="fas fa-home icon-realestate"></i>Real Estate & Housing</a>
+            <a href="#" onclick="showCategory('finance')"><i class="fas fa-dollar-sign icon-finance"></i>Financial & Tax</a>
+          </div>
+        </div>
+        <a href="courses.html" id="coursesLink">English Hub</a>
+        <a href="signup-choice.html" id="signupLink">Sign Up</a>
+        <a href="login.html" id="loginLink">Login</a>
+      </div>
+      <div id="userInfo" class="user-info" style="display: none;"></div>
+    </nav>
+  </header>
+
+  <main class="home-content">
+    <h1>Local Business Directory</h1>
+    <section class="category" id="restaurants">🍽️ Restaurant listings go here...</section>
+    <section class="category" id="beauty">💇 Beauty & Wellness listings...</section>
+    <section class="category" id="car">🚗 Car & Maintenance listings...</section>
+    <section class="category" id="legal">⚖️ Legal & Paralegal listings...</section>
+    <section class="category" id="education">📘 Education & Tutoring listings...</section>
+    <section class="category" id="fitness">🏋️ Fitness & Wellness listings...</section>
+    <section class="category" id="realestate">🏡 Real Estate & Housing listings...</section>
+    <section class="category" id="finance">💰 Financial & Tax listings...</section>
+  </main>
+
+  <script>
+    function showCategory(categoryId) {
+      document.querySelectorAll('.category').forEach(section => {
+        section.classList.remove('active');
+      });
+      const selected = document.getElementById(categoryId);
+      if (selected) selected.classList.add('active');
+    }
+  </script>
+
+  <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
+    <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+      <div class="footer-left" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Contact</h3>
+        <p>
+          <a href="http://wa.me/13103455780" target="_blank" style="color: white; text-decoration: none;">
+            <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Chat with us
+          </a>
+        </p>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Follow Us</h3>
+        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr"
+          target="_blank"
+          style="color: white; text-decoration: none;">
+          <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
+        </a>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Location</h3>
+        <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Los Angeles, USA
+      </div>
+    </div>
+    <div class="footer-bottom" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #ccc;">
+      © 2025 Georgian Success in America. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
