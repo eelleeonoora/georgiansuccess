@@ -15,7 +15,6 @@ body {
   min-height: 100vh;
 }
 
-
 /* Body and fonts */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,6 +30,8 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 15px;
 }
 
 .logo-container {
@@ -43,12 +44,14 @@ header {
 
 .logo-container img {
   height: 80px;
+  max-width: 100%;
 }
 
 .logo-text {
   font-size: 1.8rem;
   font-weight: 700;
   color: #9f1a1a;
+  white-space: nowrap;
 }
 
 /* Navigation */
@@ -56,6 +59,13 @@ nav {
   display: flex;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap; /* Wrap on smaller widths */
+}
+
+#navLinks {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 #navLinks a {
@@ -66,10 +76,11 @@ nav {
   padding: 6px 10px;
   border-radius: 5px;
   transition: background-color 0.3s;
+  white-space: nowrap;
 }
 
 #navLinks a:hover {
-  background-color: #ffffff;
+  background-color: #f0f0f0;
 }
 
 /* User info styling */
@@ -77,6 +88,7 @@ nav {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .user-info .initials {
@@ -116,6 +128,7 @@ nav {
   padding: 30px;
   text-align: center;
   background-color: #ffffff;
+  box-sizing: border-box;
 }
 
 /* General Headings */
@@ -148,7 +161,7 @@ form {
 
 label {
   font-weight: 600;
-  color: #ffffff;
+  color: #333; /* Changed from white to dark for readability */
 }
 
 input[type="text"],
@@ -208,27 +221,7 @@ a.button-link:hover {
   text-align: center;
 }
 
-/* Responsive */
-@media (max-width: 540px) {
-  .home-content {
-    padding: 20px;
-    margin: 20px;
-  }
-
-  .choice-buttons {
-    flex-direction: column;
-  }
-
-  .choice-buttons a,
-  .choice-buttons button {
-    width: 100%;
-  }
-}
-
-
-
-
-/* ======= Footer Styles ======= */
+/* Footer Styles */
 .site-footer {
   background-color: #000000;
   color: white;
@@ -273,11 +266,10 @@ a.button-link:hover {
   padding-top: 15px;
 }
 
-
+/* Flex grow main so footer sticks bottom */
 main {
   flex: 1;
 }
-
 
 /* Override nav link color only for dropdown */
 .dropdown-content a {
@@ -287,4 +279,114 @@ main {
 .dropdown-content a:hover {
   background-color: #f0f0f0;
   color: #000 !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  /* Header */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo-container {
+    gap: 8px;
+  }
+
+  .logo-container img {
+    height: 60px;
+  }
+
+  .logo-text {
+    font-size: 1.4rem;
+  }
+
+  nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  #navLinks {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #navLinks a {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .user-info {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 540px) {
+  /* Main content */
+  .home-content {
+    padding: 20px 15px;
+    margin: 20px 10px;
+    max-width: 100%;
+  }
+
+  /* Navigation stacked */
+  nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #navLinks {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #navLinks a {
+    padding: 12px 15px;
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  /* Dropdown fixes */
+  .dropdown-content {
+    position: static !important;
+    box-shadow: none;
+    border: none;
+    min-width: auto;
+    background-color: transparent;
+  }
+
+  .dropdown-content a {
+    padding-left: 30px;
+  }
+
+  /* Signup choice buttons stacked */
+  .choice-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .choice-buttons a,
+  .choice-buttons button {
+    width: 100%;
+  }
+
+  /* Footer */
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure buttons and links don't overflow */
+button, a.button-link {
+  max-width: 100%;
+  box-sizing: border-box;
 }
