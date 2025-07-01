@@ -6,28 +6,49 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    nav ul {
+    /* Navigation Styling */
+    nav {
       display: flex;
-      list-style: none;
-      padding: 0;
-      margin: 0;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #navLinks {
+      display: flex;
+      align-items: center;
       gap: 15px;
     }
+
     nav a {
       text-decoration: none;
       color: #333;
       font-weight: 600;
       padding: 10px 12px;
+      display: inline-block;
+      line-height: 1.5;
+      vertical-align: middle;
     }
+
     nav a:hover, nav a.active {
       background-color: #555;
       color: white;
       border-radius: 5px;
     }
+
     .dropdown {
       position: relative;
       display: inline-block;
     }
+
+    .dropdown > a {
+      padding: 10px 12px;
+      display: inline-block;
+      font-weight: 600;
+      color: #333;
+      text-decoration: none;
+      vertical-align: middle;
+    }
+
     .dropdown-content {
       display: none;
       position: absolute;
@@ -38,6 +59,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
     .dropdown-content a {
       color: #333 !important;
       padding: 10px 14px;
@@ -46,20 +68,26 @@
       align-items: center;
       gap: 10px;
     }
+
     .dropdown-content a:hover {
-      background-color: #6a0dad;;
+      background-color: #6a0dad;
       color: #000 !important;
     }
+
     .dropdown:hover .dropdown-content {
       display: block;
     }
+
+    /* Category Display */
     .category {
       padding: 20px;
       display: none;
     }
+
     .category.active {
       display: block;
     }
+
     .icon-restaurant { color: #ff5722; }
     .icon-beauty { color: #9c27b0; }
     .icon-car { color: #3f51b5; }
@@ -79,7 +107,7 @@
     <nav>
       <div id="navLinks">
         <div class="dropdown">
-            <a href="businesses.html">Businesses</a>
+          <a href="businesses.html">Businesses</a>
           <div class="dropdown-content">
             <a href="#" onclick="showCategory('restaurants')"><i class="fas fa-utensils icon-restaurant"></i>Restaurants</a>
             <a href="#" onclick="showCategory('beauty')"><i class="fas fa-spa icon-beauty"></i>Beauty & Wellness</a>
@@ -121,6 +149,7 @@
     }
   </script>
 
+  <!-- Footer -->
   <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
     <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
       <div class="footer-left" style="margin-bottom: 20px;">
