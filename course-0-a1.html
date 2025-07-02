@@ -25,6 +25,47 @@
     .button-link {
       padding: 14px 20px;
       font-size: 1.1rem;
+      background-color: #9f1a1a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button-link:hover {
+      background-color: #7a1313;
+    }
+
+    .logout-btn {
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-left: 10px;
+    }
+
+    .initials {
+      background-color: #9f1a1a;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 20px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
     }
   </style>
 </head>
@@ -33,13 +74,12 @@
   <header>
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
-      <!-- <span class="logo-text">Georgian Success in America</span> -->
     </a>
 
     <nav>
       <div id="navLinks">
         <a href="businesses.html">Businesses</a>
-        <a href="courses.html">English Hub</a> 
+        <a href="courses.html">English Hub</a>
         <a href="signup-choice.html">Sign Up</a>
         <a href="login.html">Login</a>
       </div>
@@ -58,28 +98,7 @@
     </div>
   </main>
 
-  <!-- Stripe Enroll Script -->
-  <script>
-    document.getElementById("enrollBtn").addEventListener("click", async () => {
-      try {
-        const response = await fetch("/.netlify/functions/create-checkout-session", {
-          method: "POST",
-        });
-
-        const data = await response.json();
-
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert("Something went wrong: " + (data.error || "No URL returned"));
-        }
-      } catch (error) {
-        alert("Network or server error: " + error.message);
-      }
-    });
-  </script>
-
-  <!-- Firebase Auth -->
+  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import {
@@ -90,7 +109,10 @@
     import {
       getFirestore,
       doc,
-      getDoc
+      getDoc,
+      updateDoc,
+      collection,
+      getDocs
     } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -106,8 +128,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const navLinks = document.getElementById("navLinks");
-
+    // Display initials when user logged in
     onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
         const uid = user.uid;
@@ -151,7 +172,48 @@
         location.reload();
       });
     };
-  </script>
 
+    // Enroll button logic
+    document.getElementById("enrollBtn").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user || !user.emailVerified) {
+        alert("Please log in and verify your email to enroll.");
+        return;
+      }
+
+      const uid = user.uid;
+      const courseName = "english-0A1";
+      const courseStartDate = new Date().toISOString();
+      const courseEndDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
+
+      try {
+        const teachersQuery = await getDocs(collection(db, "teachers"));
+        let assignedTeacherId = null;
+
+        for (const teacher of teachersQuery.docs) {
+          const data = teacher.data();
+          assignedTeacherId = teacher.id; // use first teacher for now
+          break;
+        }
+
+        if (!assignedTeacherId) {
+          alert("No teacher available at this time.");
+          return;
+        }
+
+        await updateDoc(doc(db, "users", uid), {
+          course: courseName,
+          courseStartDate,
+          courseEndDate,
+          assignedTeacherId
+        });
+
+        alert("Enrollment successful! A teacher has been assigned.");
+      } catch (error) {
+        console.error("Error during enrollment:", error);
+        alert("Enrollment failed. Please try again.");
+      }
+    });
+  </script>
 </body>
 </html>
