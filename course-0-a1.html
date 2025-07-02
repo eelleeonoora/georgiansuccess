@@ -67,6 +67,13 @@
       align-items: center;
       padding: 10px 20px;
     }
+
+    select {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -94,7 +101,13 @@
     </p>
 
     <div class="choice-buttons">
-      <button id="enrollBtn" class="button-link">Enroll Now</button>
+      <label for="timeSlot">Select Preferred Time:</label>
+      <select id="timeSlot">
+        <option value="9am_PST">9 AM PST / 12 PM EST / 8 PM Georgia</option>
+        <option value="12pm_PST">12 PM PST / 3 PM EST / 11 PM Georgia</option>
+        <option value="6pm_PST">6 PM PST / 9 PM EST / 5 AM Georgia (next day)</option>
+      </select>
+      <button id="enrollBtn" class="button-link">Buy Now</button>
     </div>
   </main>
 
@@ -174,13 +187,16 @@
         return;
       }
 
+      const timeSlot = document.getElementById("timeSlot").value;
+
       try {
         const response = await fetch("/.netlify/functions/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: user.uid,
-            course: "english-0A1"
+            course: "english-0A1",
+            timeSlot: timeSlot
           })
         });
 
