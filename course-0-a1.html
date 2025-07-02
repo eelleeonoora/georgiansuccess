@@ -71,6 +71,7 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
@@ -87,6 +88,7 @@
     </nav>
   </header>
 
+  <!-- Main Course Info -->
   <main class="course-details">
     <h2>Course 0 – A1</h2>
     <p>
@@ -98,7 +100,36 @@
     </div>
   </main>
 
-  <!-- Firebase Script -->
+  <!-- Footer -->
+  <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
+    <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+      <div class="footer-left" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Contact</h3>
+        <p>
+          <a href="http://wa.me/13103455780" target="_blank" style="color: white; text-decoration: none;">
+            <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Chat with us
+          </a>
+        </p>
+      </div>
+
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Follow Us</h3>
+        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr" target="_blank" style="color: white; text-decoration: none;">
+          <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
+        </a>
+      </div>
+
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Location</h3>
+        <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Los Angeles, USA
+      </div>
+    </div>
+    <div class="footer-bottom" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #ccc;">
+      © 2025 Georgian Success in America. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Firebase Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import {
@@ -128,7 +159,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Display initials when user logged in
+    // Show initials if logged in
     onAuthStateChanged(auth, async (user) => {
       if (user && user.emailVerified) {
         const uid = user.uid;
@@ -163,7 +194,12 @@
           <button onclick="logout()" class="logout-btn">Logout</button>
         `;
         userInfoDiv.style.display = "flex";
-        document.getElementById("navLinks").style.display = "none";
+        // Hide only login and signup links (not all nav)
+        const loginLink = document.querySelector('a[href="login.html"]');
+        const signupLink = document.querySelector('a[href="signup-choice.html"]');
+        if (loginLink) loginLink.style.display = "none";
+        if (signupLink) signupLink.style.display = "none";
+
       }
     });
 
@@ -173,11 +209,12 @@
       });
     };
 
-    // Enroll button logic
+    // Enroll Button Logic
     document.getElementById("enrollBtn").addEventListener("click", async () => {
       const user = auth.currentUser;
       if (!user || !user.emailVerified) {
         alert("Please log in and verify your email to enroll.");
+        window.location.href = "login.html";
         return;
       }
 
@@ -191,8 +228,7 @@
         let assignedTeacherId = null;
 
         for (const teacher of teachersQuery.docs) {
-          const data = teacher.data();
-          assignedTeacherId = teacher.id; // use first teacher for now
+          assignedTeacherId = teacher.id;
           break;
         }
 

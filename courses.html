@@ -40,15 +40,35 @@
       transform: translateY(-5px);
     }
   </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
+      authDomain: "mywebsitesignup-671f5.firebaseapp.com",
+      projectId: "mywebsitesignup-671f5",
+      storageBucket: "mywebsitesignup-671f5.appspot.com",
+      messagingSenderId: "418016210554",
+      appId: "1:418016210554:web:4a4f81aa4f5be22868d5c3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.emailVerified) {
+        alert("Please log in or sign up to access the English Hub.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </head>
 <body class="courses-page">
-
   <header>
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
-      <!-- <span class="logo-text">Georgian Success in America</span> -->
     </a>
-
     <nav>
       <div id="navLinks">
         <a href="businesses.html">Businesses</a>
@@ -62,7 +82,6 @@
 
   <main class="english-courses">
     <h2>Studying English Fully</h2>
-
     <div class="course-buttons">
       <a class="course-button" href="course-0-a1.html">Course 0 – A1</a>
       <a class="course-button" href="course-a1-a2.html">Course A1 – A2</a>
@@ -71,28 +90,6 @@
     </div>
   </main>
 
-  <!-- Stripe script remains (optional if needed) -->
-  <script>
-    document.getElementById("enrollBtn")?.addEventListener("click", async () => {
-      try {
-        const response = await fetch("/.netlify/functions/create-checkout-session", {
-          method: "POST",
-        });
-
-        const data = await response.json();
-
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert("Something went wrong: " + (data.error || "No URL returned"));
-        }
-      } catch (error) {
-        alert("Network or server error: " + error.message);
-      }
-    });
-  </script>
-
-  <!-- Firebase Auth -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import {
@@ -155,7 +152,7 @@
           <button onclick="logout()" class="logout-btn">Logout</button>
         `;
         userInfoDiv.style.display = "flex";
-        document.getElementById("navLinks").style.display = "none";
+        navLinks.style.display = "none";
       }
     });
 
@@ -166,45 +163,38 @@
     };
   </script>
 
- <!-- Font Awesome for social icons -->
- <link
- rel="stylesheet"
- href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
- />
- 
- <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
- <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-   <div class="footer-left" style="margin-bottom: 20px;">
-     <h3 style="color: white;">Contact</h3>
-    
-     <p>
-       <strong></strong>
-       <a href="http://wa.me/13103455780" target="_blank" style="color: white; text-decoration: none;">
-         <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Chat with us
-       </a>
-     </p>
-     
-   </div>
-   <div class="footer-right" style="margin-bottom: 20px;">
-     <h3 style="color: white;">Follow Us</h3>
-     <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr"
-        target="_blank"
-        style="color: white; text-decoration: none;">
-       <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
-     </a>
-   </div>
- 
-   <div class="footer-right" style="margin-bottom: 20px;">
-     <h3 style="color: white;">Location</h3>
-     <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Los Angeles, USA
-   </div>
- </div>
- <div class="footer-bottom" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #ccc;">
-   © 2025 Georgian Success in America. All rights reserved.
- </div>
- </footer>
+  <!-- Font Awesome for social icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 
-  
-
+  <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
+    <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+      <div class="footer-left" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Contact</h3>
+        <p>
+          <a href="http://wa.me/13103455780" target="_blank" style="color: white; text-decoration: none;">
+            <i class="fab fa-whatsapp" style="margin-right: 8px;"></i>Chat with us
+          </a>
+        </p>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Follow Us</h3>
+        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr"
+          target="_blank"
+          style="color: white; text-decoration: none;">
+          <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
+        </a>
+      </div>
+      <div class="footer-right" style="margin-bottom: 20px;">
+        <h3 style="color: white;">Location</h3>
+        <i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i>Los Angeles, USA
+      </div>
+    </div>
+    <div class="footer-bottom" style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #ccc;">
+      © 2025 Georgian Success in America. All rights reserved.
+    </div>
+  </footer>
 </body>
 </html>

@@ -50,12 +50,6 @@
       width: auto;
     }
 
-    .logo-container span {
-      font-weight: bold;
-      font-size: 20px;
-      user-select: none;
-    }
-
     #user-controls {
       display: none;
       align-items: center;
@@ -70,8 +64,6 @@
       border-radius: 50%;
       font-size: 18px;
       user-select: none;
-      display: inline-block;
-      cursor: default;
     }
 
     .logout-btn {
@@ -151,9 +143,7 @@
     <nav>
       <a href="index.html" class="logo-container">
         <img src="logo.png" alt="Logo" />
-        <span>Georgian Success in America</span>
       </a>
-
       <div id="user-controls">
         <span id="initials"></span>
         <button id="logout" class="logout-btn">Logout</button>
@@ -189,9 +179,7 @@
       </div>
       <div class="footer-right" style="margin-bottom: 20px;">
         <h3 style="color: white;">Follow Us</h3>
-        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr"
-          target="_blank"
-          style="color: white; text-decoration: none;">
+        <a href="https://www.facebook.com/GeorgianSuccessAmerica?mibextid=wwXIfr" target="_blank" style="color: white; text-decoration: none;">
           <i class="fab fa-facebook" style="margin-right: 8px;"></i>Facebook
         </a>
       </div>
@@ -205,11 +193,7 @@
     </div>
   </footer>
 
-  <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
@@ -247,6 +231,8 @@
     const signupParagraph = document.getElementById("signup-p");
     const logoutBtn = document.getElementById("logout");
 
+    const possibleCollections = ["users", "teachers", "lawyers", "consultants"];
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       messageDiv.textContent = "";
@@ -262,19 +248,26 @@
           return;
         }
 
-        // Store initials locally
-        const q = query(collection(db, "users"), where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const userData = querySnapshot.docs[0].data();
-          const userInitials = 
-            (userData.firstName?.charAt(0) || "") + 
-            (userData.lastName?.charAt(0) || "");
-          localStorage.setItem("userInitials", userInitials.toUpperCase());
+        let found = false;
+        for (let col of possibleCollections) {
+          const q = query(collection(db, col), where("email", "==", email));
+          const snapshot = await getDocs(q);
+          if (!snapshot.empty) {
+            const data = snapshot.docs[0].data();
+            const userInitials =
+              (data.firstName?.charAt(0) || "") +
+              (data.lastName?.charAt(0) || "");
+            localStorage.setItem("userInitials", userInitials.toUpperCase());
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          console.warn("User found in auth but not in Firestore collections.");
         }
 
         window.location.href = "index.html";
-
       } catch (error) {
         messageDiv.textContent = "Login failed: " + error.message;
       }
@@ -285,14 +278,11 @@
         signupParagraph.style.display = "none";
         userControls.style.display = "flex";
 
-        const q = query(collection(db, "users"), where("email", "==", user.email));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const userData = querySnapshot.docs[0].data();
-          const userInitials = 
-            (userData.firstName?.charAt(0) || "") + 
-            (userData.lastName?.charAt(0) || "");
-          initials.textContent = userInitials.toUpperCase();
+        const storedInitials = localStorage.getItem("userInitials");
+        if (storedInitials) {
+          initials.textContent = storedInitials;
+        } else {
+          initials.textContent = user.email.charAt(0).toUpperCase();
         }
       } else {
         signupParagraph.style.display = "block";
@@ -300,9 +290,9 @@
       }
     });
 
-    logoutBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
+    logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
+      localStorage.removeItem("userInitials");
       window.location.reload();
     });
   </script>
