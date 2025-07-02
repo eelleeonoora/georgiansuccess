@@ -70,8 +70,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <header>
     <a href="index.html" class="logo-container">
       <img src="logo.png" alt="Logo" />
@@ -81,18 +79,18 @@
       <div id="navLinks">
         <a href="businesses.html">Businesses</a>
         <a href="courses.html">English Hub</a>
-        <!-- <a href="signup-choice.html">Sign Up</a> -->
-        <!-- <a href="login.html">Login</a> -->
+        <a href="signup-choice.html">Sign Up</a>
+        <a href="login.html">Login</a>
       </div>
       <div id="userInfo" class="user-info" style="display: none;"></div>
     </nav>
   </header>
 
-  <!-- Main Course Info -->
   <main class="course-details">
     <h2>Course 0 – A1</h2>
     <p>
-      This course is designed for absolute beginners. Learn basic English grammar, vocabulary, greetings, and everyday expressions to get you started in American life.
+      This course is designed for absolute beginners. Learn basic English grammar,
+      vocabulary, greetings, and everyday expressions to get you started in American life.
     </p>
 
     <div class="choice-buttons">
@@ -100,7 +98,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer" style="background-color: #000; color: white; padding: 30px 20px; margin-top: 40px;">
     <div class="footer-container" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
       <div class="footer-left" style="margin-bottom: 20px;">
@@ -129,7 +126,7 @@
     </div>
   </footer>
 
-  <!-- Firebase Logic -->
+  <!-- Firebase + Stripe Checkout Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
     import {
@@ -137,14 +134,6 @@
       onAuthStateChanged,
       signOut
     } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      updateDoc,
-      collection,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDHl-WeXRfbkxP3npd_5Xb4U0I9lcPqUEg",
@@ -157,49 +146,17 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    // Show initials if logged in
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user && user.emailVerified) {
-        const uid = user.uid;
-        let firstName = "";
-        let lastName = "";
-
-        try {
-          const individualDoc = await getDoc(doc(db, "users", uid));
-          const businessDoc = await getDoc(doc(db, "businessUsers", uid));
-
-          const data = individualDoc.exists()
-            ? individualDoc.data()
-            : businessDoc.exists()
-            ? businessDoc.data()
-            : null;
-
-          if (data) {
-            firstName = data.firstName || "";
-            lastName = data.lastName || "";
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-
-        const initials =
-          (firstName.charAt(0) || "").toUpperCase() +
-          (lastName.charAt(0) || "").toUpperCase();
-
+        const initials = (user.displayName?.split(" ")[0][0] || "U") + (user.displayName?.split(" ")[1]?.[0] || "");
         const userInfoDiv = document.getElementById("userInfo");
         userInfoDiv.innerHTML = `
-          <div class="initials">${initials}</div>
+          <div class="initials">${initials.toUpperCase()}</div>
           <button onclick="logout()" class="logout-btn">Logout</button>
         `;
         userInfoDiv.style.display = "flex";
-        // Hide only login and signup links (not all nav)
-        const loginLink = document.querySelector('a[href="login.html"]');
-        const signupLink = document.querySelector('a[href="signup-choice.html"]');
-        if (loginLink) loginLink.style.display = "none";
-        if (signupLink) signupLink.style.display = "none";
-
+        document.getElementById("navLinks").style.display = "none";
       }
     });
 
@@ -209,7 +166,6 @@
       });
     };
 
-    // Enroll Button Logic
     document.getElementById("enrollBtn").addEventListener("click", async () => {
       const user = auth.currentUser;
       if (!user || !user.emailVerified) {
@@ -218,38 +174,32 @@
         return;
       }
 
-      const uid = user.uid;
-      const courseName = "english-0A1";
-      const courseStartDate = new Date().toISOString();
-      const courseEndDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
-
       try {
-        const teachersQuery = await getDocs(collection(db, "teachers"));
-        let assignedTeacherId = null;
-
-        for (const teacher of teachersQuery.docs) {
-          assignedTeacherId = teacher.id;
-          break;
-        }
-
-        if (!assignedTeacherId) {
-          alert("No teacher available at this time.");
-          return;
-        }
-
-        await updateDoc(doc(db, "users", uid), {
-          course: courseName,
-          courseStartDate,
-          courseEndDate,
-          assignedTeacherId
+        const response = await fetch("/.netlify/functions/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.uid,
+            course: "english-0A1"
+          })
         });
 
-        alert("Enrollment successful! A teacher has been assigned.");
-      } catch (error) {
-        console.error("Error during enrollment:", error);
-        alert("Enrollment failed. Please try again.");
+        const data = await response.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Failed to redirect to payment: " + data.error);
+        }
+      } catch (err) {
+        console.error("Stripe error:", err);
+        alert("Error redirecting to payment page.");
       }
     });
   </script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 </body>
 </html>
